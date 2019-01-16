@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add a new User</title>
+	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+	<style type="text/css">
+	#Block
+		{
+			background: lightblue;
+			width: 280px;
+			height: auto;
+			padding-left: 20px;
+			color: white;
+			position: fixed;
+			left: 500px;
+			top: 200px;
+			padding-bottom: 10px;
+			padding-top: 10px;
+			border-top-left-radius: 45px;
+			text-align: left;
+			font-size: x-large;
+		}
+		.VT
+		{
+			position: fixed;
+			left:650px;
+			margin: 3.5px;
+					}
+		#AddPicture
+		{
+			width: 50px;
+			height: 50px;
+			position: fixed;
+			left: 780px;
+			top: 150px;
+		}
+	</style>
+</head>
+<body>
+	<div id="Block">
+	<form method="post" action="AddUser.asp">
+		Geschlecht: <input class="VT" name="Gname"><br>
+		Name:	<input class="VT" ="2" name="Nname"><br>
+		Vorname:<input class="VT" name="Vname"><br>
+		<input type="submit" name="Add New" id="Sender">
+	</form></div>
+	<image id="AddPicture" src="https://image.flaticon.com/icons/svg/104/104779.svg"></image>
+</body>
+</html>
