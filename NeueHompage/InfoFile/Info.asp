@@ -34,6 +34,18 @@
 			color: blue;
 			font-size: x-large;
 		}
+		.AddUserPic
+		{
+			width: 30px;
+			height: 30px;
+			margin-left: 8.5px;
+		}
+		body
+		{
+			background-image: url("https://image.flaticon.com/icons/svg/1343/1343912.svg")
+			
+		}
+
 </style>
 <div id=header>Info</div>
 <body><div id="Block">
@@ -42,7 +54,7 @@
 		o_cnn.open "Provider=SQLOLEDB; Server=10.150.2.5; uid=sa; pwd=sl34150; database=extract"
 
 		SET rs=Server.CreateObject("ADODB.recordset")
-		rs.Open "SELECT Geschlecht, Name, Vorname FROM AdressenAP WHERE APID='" & Request.Querystring("APID") & "'",o_cnn
+		rs.Open "SELECT Geschlecht, Name, Vorname, APID FROM AdressenAP WHERE APID='" & Request.Querystring("APID") & "'",o_cnn
 		
 		if Request("Geschlecht")=0 then
 			Response.Write("Herr" & " ")
@@ -53,6 +65,8 @@
 
 
 		Response.Write(rs.Fields("Name").value & " " & " " & rs.Fields("Vorname"))
+
+		Response.Write("<a class=""verlinkung""href=""../Update/Changer.asp?APID=" & rs.Fields("APID") & """><image class=""AddUserPic""src=""https://image.flaticon.com/icons/svg/126/126794.svg""></a>")
 
 
 	%></div>

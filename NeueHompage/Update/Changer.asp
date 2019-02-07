@@ -36,10 +36,10 @@
 		  o_cnn.open "Provider=SQLOLEDB; Server=10.150.2.5; uid=sa; pwd=sl34150; database=extract"
 
 		  SET rs=Server.CreateObject("ADODB.recordset")
-		  rs.Open "SELECT Name, Vorname, APID FROM AdressenAP WHERE APID='" & Request("APID") & "'",o_cnn
+		  rs.Open "SELECT Name, Vorname, Geschlecht, APID FROM AdressenAP WHERE APID='" & Request("APID") & "'",o_cnn
 
 		  do until rs.EOF
-		  	Response.Write(rs.Fields("Name").Value & " " & rs.Fields("Vorname").value &" ")
+		  	Response.Write(rs.Fields("Name").Value & " " & rs.Fields("Vorname").value & " ")
 		  	Response.Write("APID" & ":" & " " & rs.Fields("APID").value)
 
 
@@ -51,6 +51,10 @@
 
 
 <form method="get" action="update.asp">
+		Gesclecht: <select class="VT" name="Gesclecht">
+						<option class="VT" value="0">Herr</option>
+						<option class="VT" value="255">Frau</option>
+					</select><br> 
 		Name:	<input id="NameTEXT" value=<% 
 			SET o_cnn = Server.CreateObject("ADODB.Connection")
 			  o_cnn.open "Provider=SQLOLEDB; Server=10.150.2.5; uid=sa; pwd=sl34150; database=extract"

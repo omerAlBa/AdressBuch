@@ -39,11 +39,15 @@
 <body>
 	<div id="Block">
 	<form method="post" action="AddUser.asp">
-		Geschlecht: <input class="VT" name="Gname"><br>
+		Geschlecht:<select class="VT" name="Gname">
+						<option class="VT" value="0">Herr</option>
+						<option class="VT" value="255">Frau</option>
+					</select><br>
 		Name:	<input class="VT" ="2" name="Nname"><br>
 		Vorname:<input class="VT" name="Vname"><br>
 		<input type="submit" name="Add New" id="Sender">
 	</form></div>
 	<image id="AddPicture" src="https://image.flaticon.com/icons/svg/104/104779.svg"></image>
+	
 </body>
 </html>

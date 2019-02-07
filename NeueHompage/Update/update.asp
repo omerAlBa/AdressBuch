@@ -12,7 +12,7 @@
 			o_cnn.execute sql
 			o_cnn.close
 
-			Response.Redirect "../ProjectNr.3/homepage.asp"
+			Response.Redirect("../index.asp")
 	%>
 
 </body>

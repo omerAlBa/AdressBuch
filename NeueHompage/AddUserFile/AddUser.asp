@@ -10,6 +10,7 @@
 			  "VALUES ('" & Request("Gname") & "','" & Request("Nname") & "','" & Request("Vname") & "')"
 
 		Response.Write sql
+		Response.Write (Gname & "Gname")
 
 		o_cnn.Execute sql
 		o_cnn.close

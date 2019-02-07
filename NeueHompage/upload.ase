@@ -1,0 +1,305 @@
+<%  
+' ##########################################################
+' # class: Upload
+' #  date: 11/05/10
+' #  desc: Handles binary request stream for uploading 
+' #		   files
+' ##########################################################
+Class Upload
+	
+	Dim vFiles()	
+	Private MAXFILES
+
+	'#######################################################
+	'# CONSTRUCTORS
+	'#######################################################	
+	    
+    Private Sub Class_Initialize
+    	MAXFILES = 10
+      	ReDim vFiles(MAXFILES)  
+      	For i=0 To UBound(vFiles)
+      		Set vFiles(i) = New UploadFile   
+      	Next          	
+    End Sub
+
+    Private Sub Class_Terminate      
+    End Sub
+	
+	'#######################################################
+	'#	PUBLIC METHODS
+	'#######################################################
+	 
+	' Reads the binary data from request	   
+    Public Sub Upload
+      If Request.TotalBytes > 0 Then
+        Dim binData
+          binData = Request.BinaryRead(Request.TotalBytes)
+          getData binData          
+      End If
+    End Sub
+
+	
+	'#######################################################
+	'#	PROPERTIES
+	'#######################################################
+	
+	' Gets the uploaded files
+	' @Params:
+	' index - index of file
+	Public Function Files(index)
+    	Set Files = vFiles(index)
+    End Function	
+
+	'#######################################################
+	'#	PRIVATE METHODS
+	'#######################################################
+	
+	' Splits the request stream and parses for file information
+	' @Params:
+	' rawdata - binary request stream
+	Private Sub getData(rawData)
+    	Dim separator 
+    	Dim lenSeparator
+    	Dim currentPos  	
+    	Dim inStrByte
+    	Dim value, mValue
+    	Dim tempValue	  	
+    	
+    	Dim begPos, endPos, midValue, nValue
+        Dim intDict
+        Dim nameN
+        Dim nameValue, isValid
+        Dim cntFiles
+        
+      	separator = MidB(rawData, 1, InstrB(1, rawData, stringToByte(vbCrlf)) - 1)
+      	lenSeparator = LenB(separator)
+      	currentPos = 1    
+      	inStrByte = 1    
+      	tempValue = ""
+		    cntFiles = 0
+		
+    	While inStrByte > 0
+      		inStrByte = InStrB(currentPos, rawData, separator)
+      		mValue = inStrByte - currentPos
+
+      		If mValue > 1 And cntFiles < MAXFILES Then        		       		
+        		value = MidB(rawData, currentPos, mValue)                  		
+
+          		begPos = 1 + InStrB(1, value, ChrB(34))
+          		endPos = InStrB(begPos + 1, value, ChrB(34))
+          		nValue = endPos
+        
+          		nameN = MidB(value, begPos, endPos - begPos)        
+          		isValid = True          		
+          		If InStrB(1, value, stringToByte("Content-Type")) > 1 Then          			
+            		begPos = 1 + InStrB(endPos + 1, value, ChrB(34))
+            		endPos = InStrB(begPos + 1, value, ChrB(34))
+            		If endPos = 0 Then            			
+              			endPos = begPos + 1
+              			isValid = False
+            		End If
+            		midValue = MidB(value, begPos, endPos - begPos)
+              		vFiles(cntFiles).FileName = Trim(byteToString(midValue))
+					
+          			begPos = 14 + InStrB(endPos + 1, value, stringToByte("Content-Type:"))
+          			endPos = InStrB(begPos, value, stringToByte(vbCrlf))
+
+            		midValue = MidB(value, begPos, endPos - begPos)
+              		vFiles(cntFiles).ContentType = Trim(byteToString(midValue))
+              		
+              		If InStrB(1, value, stringToByte("Content-Transfer-Encoding:")) > 1 Then  
+              			begPos = 27 + InStrB(endPos + 1, value, stringToByte("Content-Transfer-Encoding:"))
+          				endPos = InStrB(begPos, value, stringToByte(vbCrlf))
+          				midValue = MidB(value, begPos, endPos - begPos)
+              			vFiles(cntFiles).ContentTransferEncoding = Trim(byteToString(midValue))              		
+          			End If
+          			
+          			begPos = (currentPos-2) + endPos + 4
+            		endPos = (currentPos-2) + LenB(value)
+
+            		nameValue = MidStream(rawData,begPos,(endPos - begPos) - 1)            		
+          		Else
+          			
+          			begPos = (currentPos-2) + nValue + 5
+            		endPos = lenb(rawData) - begPos
+            		nameValue = MidStream(rawData, begPos, endPos)
+            		
+          		End If
+
+          		If isValid = True Then          			
+          			vFiles(cntFiles).Data = nameValue            		
+          		End If
+      			cntFiles = cntFiles + 1
+      		End If
+
+      		currentPos = lenSeparator + inStrByte
+      		
+    	Wend
+  	End Sub
+	
+	'#######################################################
+	'#	PRIVATE FUNCTIONS
+	'#######################################################
+	
+	' Gets some bytes from binary data
+	' @Params:
+	' binary - binary data
+	' startPos - start position 
+	' length - number of bytes
+	Private Function MidStream(binary, startPos, length)
+		If(length<=0) Then Exit Function
+  		Const adTypeText = 2
+  		Const adTypeBinary = 1  
+  		
+  		Dim BinaryStream 
+  		Set BinaryStream = CreateObject("ADODB.Stream")
+    
+		BinaryStream.Type = adTypeBinary
+  
+  		BinaryStream.Open
+  		BinaryStream.Write Binary
+      
+  		BinaryStream.Position = startPos  				
+    	MidStream = BinaryStream.Read(length)  		
+	End Function
+	
+	' Converts a string to byte string
+	' @Params:
+	' toConv - string to convert  
+	Private Function stringToByte(toConv)
+  		Dim tempChar
+     	For i = 1 to Len(toConv)
+       		tempChar = Mid(toConv, i, 1)
+      		stringToByte = stringToByte & chrB(AscB(tempChar))
+     	Next
+  	End Function
+	
+	' Converts a byte string to char string
+	' @Params:
+	' toConv - string to convert
+  	Private Function byteToString(toConv)
+    	For i = 1 to LenB(toConv)
+      		byteToString = byteToString & Chr(AscB(MidB(toConv,i,1))) 
+    	Next
+  	End Function
+  
+End Class
+
+' ##########################################################
+' # class: UploadFile
+' #  date: 11/05/10
+' #  desc: Represents a uploaded file
+' ##########################################################
+Class UploadFile
+	
+	Private vContentType
+	Private vFileName
+	Private vData
+	Private vIsMissing
+	Private vContentTransferEncoding
+	'#######################################################
+	'# CONSTRUCTORS
+	'#######################################################	
+	    
+    Private Sub Class_Initialize
+      vIsMissing = True
+    End Sub
+
+    Private Sub Class_Terminate
+      
+    End Sub
+	
+	'#######################################################
+	'#	PUBLIC METHODS
+	'#######################################################
+	
+	' Saves the uploaded file to disk
+	' @Params:
+	' file - path of file
+	Public Sub SaveAs(file)		   
+	  	Const adTypeText = 2
+  		Const adTypeBinary = 1  
+  		Const adSaveCreateOverWrite = 2
+  		
+  		Dim BinaryStream 
+  		Set BinaryStream = CreateObject("ADODB.Stream")
+    
+		BinaryStream.Type = adTypeBinary
+  
+  		BinaryStream.Open
+  		BinaryStream.Write vData
+      
+  		BinaryStream.Position = 0
+  		BinaryStream.Type = adTypeText   
+  	
+    	BinaryStream.CharSet = "ISO-8859-1"  		
+    
+  		BinaryStream.SaveToFile file, adSaveCreateOverWrite
+	End Sub	
+	
+	' Saves the uploaded file to a field of recorset
+	' @Params:
+	' field - field of recorset
+	Public Function FileToField(ByRef field)		
+		field.AppendChunk vData
+	End Function
+	
+	'#######################################################
+	'#	PROPERTIES
+	'#######################################################
+	
+	' Checks, if uploaded file is broken
+	Public Property Get IsMissing
+    	IsMissing = vIsMissing
+    End Property
+    
+    ' Gets the file name
+    Public Property Get FileName
+    	temp = vFileName
+        tempPos = 1 + InStrRev(temp, "\")
+        FileName = Mid(temp, tempPos)    	
+    End Property
+    
+    ' Sets the file name
+    Public Property Let FileName(value)    
+    	vFileName = value
+    End Property
+    
+    ' Gets the content type
+    Public Property Get ContentType
+    	ContentType = vContentType
+    End Property
+        
+    ' Sets the content type
+    Public Property Let ContentType(value)
+    	vContentType = value
+    End Property
+	
+	' Gets the size of file
+	Public Property Get Size
+    	Size = LenB(vData)
+    End Property
+	
+	' Gets the content of file
+	Public Property Get Data
+    	Data = vData
+    End Property
+    
+    ' Sets the content of file    
+    Public Property Let Data(value)
+    	vIsMissing = False
+    	vData = value
+    End Property    
+    
+    ' Gets the content encoding
+	Public Property Get ContentTransferEncoding
+    	ContentTransferEncoding = vContentTransferEncoding
+    End Property
+    
+    ' Sets the content encoding   
+    Public Property Let ContentTransferEncoding(value)    	
+    	vContentTransferEncoding = value
+    End Property
+
+End Class  
+%>

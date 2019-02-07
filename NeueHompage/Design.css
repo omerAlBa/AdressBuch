@@ -1,0 +1,160 @@
+#Block
+		{
+			background: lightblue;
+			width: 350px;
+			height: auto;
+			padding-left: 20px;
+			color: white;
+			position: fixed;
+			left: 500px;
+			top: 200px;
+			padding-bottom: 10px;
+			border-top-left-radius: 45px;
+			text-align: left;
+			font-size: x-large;
+
+		}
+		#AdressBlock
+		{
+			position: fixed;
+			left:509px;
+			top: 175px;
+			color: blue;
+			font-size: x-large;
+		}
+		.AddUserPic
+		{
+			width: 20px;
+			height: 30px;
+
+		}
+		.verlinkung
+		{
+			margin-left: 8.5px;
+		}
+		#neuerEintrag
+		{
+			position: fixed;
+			left: 510px;
+			top: 578px;
+			width: 50px;
+		}
+		#neuerEintrag1
+		{
+			position: fixed;
+			left: 570px;
+			top: 600px;
+		}
+		#SucheDIV
+		{
+			position: fixed;
+			left: 670px;
+			top:170px;
+
+		}
+		#SeitenAnzahl
+		{
+			position: fixed;
+
+		}
+		#AnzeigeDerSeite
+		{
+			position: fixed;
+			left:566px;
+			top:655px;
+		}
+		.recht
+		{
+			position: fixed;
+			left:580px;
+			top:650px;
+			width: 30px;
+			height: 30px;
+		}
+		.recht1
+		{
+			position: fixed;
+			left:540px;
+			top:650px;
+			width: 30px;
+			height: 30px;
+		}
+		.links
+		{
+			position: fixed;
+			left:710px;
+			top:650px;
+			width: 30px;
+			height: 30px;
+
+		}
+		.links1
+		{
+			position: fixed;
+			left:750px;
+			top:650px;
+			width: 30px;
+			height: 30px;
+		}
+		#SeitenZahlEingabe
+		{
+			width: 350px;
+			height: auto;
+		}
+		.AnzeigeDerSeite
+		{
+			position: fixed;
+			left:566px;
+			top:655px;
+		}
+		#SeitenAngeber
+		{
+			position: fixed;
+			top: 650px;
+			left: 595px;
+		}
+		#untereKasten
+		{
+			position: fixed;
+			left:500px; 
+			top:640px;
+			background: lightblue;
+			width: 370px;
+			height: 60px;
+			border-bottom-left-radius: 45px;
+			text-align: left;
+			font-size: x-large; 
+		}
+		#alleSeitenDerDB
+		{
+			color: red;
+		}
+		.zeigAn
+		{
+			position: fixed;
+			top: 705.5px;
+			left: 555px;
+			font-size: x-large; 
+		}
+		input
+		{
+			position: fixed;
+			left: 630px;
+			text-align: center;
+		}
+		#Sucher
+		{
+			position: fixed;
+			left: 710px;
+			top: 180px;
+			border-radius: 20px;
+			background-color: lightblue;
+			text-align: center;
+		}
+		h1
+		{
+			position: fixed;
+			left: 530px;
+			top: 148px;	
+			color: #4169E1;
+		}

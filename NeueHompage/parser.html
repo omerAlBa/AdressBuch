@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+</head>
+<body>
+	<script type="text/javascript">
+	 
+	 var text = "<bookstore><book>" +
+  "<title>Everyday Italian</title>" +
+  "<author>Giada De Laurentiis</author>" +
+  "<year>2005</year>" +
+  "</book></bookstore>";
+	<p id="demo"></p>
+
+	
+		var text, parser, xmlDoc;
+
+		parser = new DOMParser();
+		xmlDOC = parser.parseFormString(text, "text/xml");
+
+		document.getElementById("demo").innerHTML = xmlDOC.getElementByTagName("title")[0].childNodes[0].nodeValue;
+	</script>
+</body>
+</html>

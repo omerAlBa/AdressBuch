@@ -11,6 +11,7 @@
 	
 	o_cnn.close	
 	Response.Redirect("../index.asp")
+
 %>
 </body>
 </html>
